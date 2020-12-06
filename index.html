@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Calculator</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    * {
+      padding: 0px;
+      margin: 0px;
+      box-sizing: border-box;
+    }
+
+    #calculator {
+      background-color: #3c3940;
+      display: table;
+    }
+
+    input {
+      outline: none;
+    }
+
+    input[type=text] {
+      width: 300px;
+      height: 74px;
+      background-color: #c7d9d8;
+      font-size: 25px;
+      text-align: right;
+    }
+
+    table {
+      width: 300px;
+      background-color: #3c3940;
+    }
+
+    input[type=button] {
+      border: none;
+      padding: 20px;
+      font-size: 25px;
+      cursor: pointer;
+      width: 100%;
+      transition: background-color 0.5s;
+    }
+
+    input[type=button]:not(.operator) {
+      background-color: #2ecc71;
+    }
+
+    input[type=button]:hover {
+      color: white;
+      font-size: 30px;
+      padding: 17px;
+    }
+
+    input[type=button]:hover:not(.operator) {
+      background-color: #27ae60;
+    }
+
+    .operator:hover {
+      background-color: #994908;
+    }
+
+    input[type=button]:active {
+      border-style: groove;
+      border-color: grey;
+      border-width: 1px;
+    }
+
+
+    .operator {
+      background-color: rgba(255, 106, 6, 0.774);
+    }
+  </style>
+
+</head>
+
+<body>
+  <audio src="button_press.mp3" id="press_sound"></audio>
+
+  <div id="calculator">
+    <input type="text" id="screen" onkeydown="keydown(event)">
+    <table cellspacing=10px>
+      <tr>
+        <td><input type="button" value="7" onclick="operate(7)"></td>
+        <td><input type="button" value="8" onclick="operate(8)"></td>
+        <td><input type="button" value="9" onclick="operate(9)"></td>
+        <td><input type="button" class="operator" value="/" onclick="operate('/')"></td>
+      </tr>
+      <tr>
+        <td><input type="button" value="4" onclick="operate(4)"></td>
+        <td><input type="button" value="5" onclick="operate(5)"></td>
+        <td><input type="button" value="6" onclick="operate(6)"></td>
+        <td><input type="button" class="operator" value="X" onclick="operate('X')"></td>
+      </tr>
+      <tr>
+        <td><input type="button" value="1" onclick="operate(1)"></td>
+        <td><input type="button" value="2" onclick="operate(2)"></td>
+        <td><input type="button" value="3" onclick="operate(3)"></td>
+        <td><input type="button" class="operator" value="-" onclick="operate('-')"></td>
+      </tr>
+      <tr>
+        <td><input type="button" value="0" onclick="operate(0)"></td>
+        <td><input type="button" value="." onclick="operate('.')"></td>
+        <td><input type="button" class="operator" value="+" onclick="operate('+')"></td>
+        <td><input type="button" class="operator" value="=" onclick="operate('=')"></td>
+      </tr>
+    </table>
+  </div>
+
+
+  <script>
+    const screen = document.getElementById('screen');
+    const pressSound = document.getElementById('press_sound');
+
+    function operate(value) {
+      if (value == '=') {
+        try {
+          let res = screen.value.replace(/X/g, "*");
+          res = res.replace(/x/g, "*");
+          screen.value = eval(res);
+        } catch (error) {
+          screen.value = '';
+        }
+      } else {
+        if (isNaN(parseInt(value))) screen.value += ` ${value} `;
+        else screen.value += value;
+      }
+      pressSound.play();
+    }
+
+    function keydown(event) {
+      pressSound.play();
+      if (event.key == 'Enter' || event.key == '=') {
+        event.preventDefault();
+        operate('=');
+      }
+    }
+  </script>
+
+</body>
+
+</html>
